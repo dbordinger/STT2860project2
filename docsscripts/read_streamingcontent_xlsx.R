@@ -1,28 +1,28 @@
 # reads two datasets from the raw data file streamingcontent.xlsx
 # writes the datasets to individual .rds files and an .Rdata file
 # original data is in the raw folder, new in the processed folder
-
+library(readxl)
+library(tidyverse)
 
 # view the names of the worksheets that are in streamingcontent.xlsx
 
-ERASE THIS AND ENTER THE PROPER CODE
-
+read_excel("dataraw/streamingcontent.xlsx")
+excel_sheets("dataraw/streamingcontent.xlsx")
 
 # read in the first sheet of streamingcontent.xlsx and name it dplus
 
-ERASE THIS AND ENTER THE PROPER CODE
-
+dplus <- read_excel("dataraw/streamingcontent.xlsx", sheet = 1)
 
 # read in the second sheet of streamingcontent.xlsx and name it strmtv
 
-ERASE THIS AND ENTER THE PROPER CODE
+strmtv <- read_excel("dataraw/streamingcontent.xlsx", sheet = 2)
 
 
 # write the datasets to two .rds files named dplus.rds and strmtv.rds
 
-ERASE THIS AND ENTER THE PROPER CODE
-
+saveRDS("dplus", file = "dataprocessed/dplus.rds")
+saveRDS("strmtv", file = "dataprocessed/strmtv.rds")
 
 # write the datasets to an .Rdata file called streamingcontent.Rdata
 
-ERASE THIS AND ENTER THE PROPER CODE
+save(dplus, strmtv, file = "dataprocessed/streamingcontent.RData")

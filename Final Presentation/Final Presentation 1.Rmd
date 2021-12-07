@@ -1,0 +1,83 @@
+---
+title: "Final Presentation"
+author: "Dylan Bordinger"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: spacelab
+    highlight: textmate
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+***
+
+## Setup
+
+### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(readr)
+```
+### Datasets used
+
+```{r}
+billionaires_2021_10_31 <- read.csv(file = "~/STT2860Project2/STT2860project2/dataraw/billionaires_2021_10_31.csv")
+
+ramenratings <- read_csv("~/STT2860Project2/STT2860project2/dataraw/ramenratings.csv")
+
+```
+
+
+# Billionaires Grouped By Industry
+
+```{r}
+billionaires_by_industry <- billionaires_2021_10_31 %>%
+  group_by(Industry) %>%
+  summarize(num_bils = n()) %>%
+  arrange(desc(num_bils))
+
+ggplot(billionaires_by_industry, aes(reorder(Industry, num_bils), num_bils)) +
+  geom_col(width = .5, fill = "forest green") +
+  labs(title = "Distribution of Billionaires by Industry") +
+  xlab("Industry") +
+  ylab("Number of Billionaires per Industry") +
+  scale_y_continuous(breaks = seq(0, 100, by = 10)) +
+  coord_flip()
+```
+
+
+### I used the group_by and summarize functions to create a new variable for the amount of billionaries per industry. I was originally going to make some sort of graph based on country but the data ended up looking very concentrated in only a few countries out of many listed. I was also personally more interested in seeing what industries tended to produce the most billionaires, rather than country. For some reason there is a stray Media&Telecom billionaire that does not want to group with the rest, power to them.
+
+# The Ramen Ratings
+```{r}
+
+ramenratings1 <- ramenratings %>%
+  mutate(stars = as.numeric(stars))
+
+ramenratings2 <- ramenratings1[complete.cases(ramenratings1), ]
+
+ramenratings_by_country <- ramenratings2 %>%
+  group_by(country) %>%
+  summarize(ratings = mean(stars)) %>%
+  arrange(desc(ratings))
+
+ggplot(ramenratings_by_country, aes(reorder(country, ratings), ratings)) +
+  geom_col(width = .85, fill = "burlywood") +
+  labs(title = "Which Country has the Best Ramen?", subtitle = "(From The Ramen Rater website)") +
+  xlab("Country") +
+  ylab("Average Rating of Ramen") +
+  coord_flip() +
+  theme_classic(base_size = 10)
+
+```
+
+
+### At first I tried looking at the average rating of ramen per style but the results weren't very interesting, there's a lot of decent ramen in all styles. When I ended up with this graph based on country, I was surprised to see Brazil on top. It looks like many places in the Eastern and South Asian parts of the world have good ramen, this might be a better chart to look at to know where to avoid if you're planning on eating some ramen.
+***
+```{r}
+sessionInfo()
+```
